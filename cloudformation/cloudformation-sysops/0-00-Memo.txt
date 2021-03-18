@@ -11,39 +11,3 @@
 
 Q: What is tcp, udp, icmp?
 https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/security-group-rules-reference.html
-
-Fn::FindInMap
-Fn::FindInMap
-Fn::FindInMap
-
-Outputs - stack cloudfomration template
-
-Export - link CloudFormation template together
-
-!ImportValue
-!ImportValue
-!ImportValue
-
-Environment dev/test/prod
-
-Condition: CreateProdResources: !Equals [!Ref EnvType, prod]
-ONLY True if the EnvironmentType equals to Prod (Production)
-
-    - And
-    - Equals
-    - If
-    - Not
-    - Or
-
-Resources:
-    MountPoint:
-        Type: AWS::EC2::VolumeAttachment
-        Condition: CreateProdResources
-
-Ref
-GetAtt
-FindInMap
-ImportValue
-Join
-Sub
-Condition: If Not Equals, and etc
