@@ -1,0 +1,54 @@
+Parameters:
+  SecurityGroupDescription1:
+    Description: Security Group Description
+    Type: String
+
+  SecurityGroupDescription2:
+    Description: Security Group Description
+    Type: String
+
+Resources:
+  MyInstance:
+    # Type: AWS::{aws-product-name}::{data-type-name}
+    Type: AWS::EC2::Instance
+    Properties:
+      AvailabilityZone: us-east-1a
+      ImageId: ami-038f1ca1bd58a5790
+      InstanceType: t2.micro
+      SecurityGroups:
+        - !Ref SecurityGroupSSH
+        - !Ref SecurityGroupServer
+
+  # Allocate an Amazon EC2 Elastic IP address
+  MyEIP:
+    Type: AWS::EC2::EIP
+    Properties:
+      InstanceId: !Ref MyInstance # Logical name of an AWS::EC2::Instance resource (E.g. MyInstance)
+
+  # our first EC2 security group
+  SecurityGroupSSH:
+    Type: AWS::EC2::SecurityGroup # Define the physical resource
+    Properties:
+      GroupDescription: !Ref SecurityGroupDescription1
+      SecurityGroupIngress:
+        - IpProtocol: tcp # Protocol
+          FromPort: 22 # Port range
+          ToPort: 22 # Port range
+          CidrIp: 0.0.0.0/0 # Source
+
+  # our second EC2 security group
+  SecurityGroupServer:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: !Ref SecurityGroupDescription2
+      SecurityGroupIngress:
+        # The IP protocol name (tcp, udp, icmp, icmpv6)
+        # For tcp, udp, and icmp, you must specify a port range.
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 192.168.1.1/32

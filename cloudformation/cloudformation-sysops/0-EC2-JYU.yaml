@@ -2,6 +2,6 @@ Resources:
   MyInstance: # aws:cloudformation:logical-id
     Type: AWS::EC2::Instance
     Properties:
-      AvailabilityZone: us-east-1a
-      ImageId: ami-038f1ca1bd58a5790
-      InstanceType: t2.micro
+      AvailabilityZone: us-east-1a # Update requires: Replacement
+      ImageId: ami-038f1ca1bd58a5790 # Update requires: Replacement
+      InstanceType: t2.micro # Update requires: Some interruptions
