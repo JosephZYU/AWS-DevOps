@@ -112,7 +112,7 @@ Stack Creation Fails:
             --on-failure DO_NOTHING 👈🎉
 
         🚀 https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-describing-stacks.html#using-cfn-describing-stacks-describe-stacks
-        
+
         💲 aws cloudformation describe-stacks --stack-name cfn-stack-ec2-jyu
         {
             "Stacks": [
@@ -132,3 +132,41 @@ Stack Creation Fails:
                 }
             ]
         }
+
+🚀 https://aws.amazon.com/blogs/devops/passing-parameters-to-cloudformation-stacks-with-the-aws-cli-and-powershell/
+    
+    ✅ 💲 
+
+    $ aws cloudformation create-stack \
+    → --stack-name cfn-nestedstack-jyu \
+    → --template-body file://7-nestedstacks.yaml \
+    → --parameters ParameterKey=SSHKey,ParameterValue=AWSDevOps
+    
+    aws cloudformation create-stack \
+    --stack-name cfn-stack-ec2-jyu \
+    --template-body file://0-EC2-JYU.yaml \
+    --tags Key=StaffID,Value=320448
+
+    $ aws cloudformation create-stack \
+    → --stack-name cfn-stack-ec2-jyu \
+    → --template-body file://0-EC2-JYU.yaml \
+    → --tags Key=StaffID,Value=320448
+
+    {
+        "StackId": "arn:aws:cloudformation:us-east-1:476533684882:stack/cfn-stack-ec2-jyu/ef9685b0-87e2-11eb-a76e-0a8a0480d74d"
+    }
+
+
+DeletionPolicy=Retain
+
+DeletionPolicy=Snapshot
+
+DeletionPolicy=Delete
+
+aws cloudformation create-stack \
+--stack-name cfn-deletionpolicy-2-jyu \
+--template-body file://9-deletionpolicy-jyu.yaml \
+--tags Key=StaffID,Value=320448
+
+aws cloudformation delete-stack --stack-name cfn-deletionpolicy-jyu
+
