@@ -1,4 +1,3 @@
----
 Parameters:
   SSHKey:
     Type: AWS::EC2::KeyPair::KeyName
@@ -22,8 +21,11 @@ Resources:
           yum update -y aws-cfn-bootstrap
           # Start cfn-init
           /opt/aws/bin/cfn-init -s ${AWS::StackId} -r MyInstance --region ${AWS::Region}
-          # Start cfn-signal to the wait condition
-          /opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackId} --resource SampleWaitCondition --region ${AWS::Region}
+          # Start cfn-signal to the wait condition - let the CF to hang for a few moments until absolute 200
+          /opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackId} --resource DedicatedWaitCondition --region ${AWS::Region}
+      Tags:
+        - Key: "Name"
+          Value: "MyInstance-cfn_init-JYU"
     Metadata:
       Comment: Install a simple Apache HTTP page
       AWS::CloudFormation::Init:
@@ -34,24 +36,25 @@ Resources:
           files:
             "/var/www/html/index.html":
               content: |
-                <h1>Hello World from EC2 instance!</h1>
-                <p>This was created using cfn-init</p>
+                <h1>Hello World from EC2 instance by Joseph!</h1>
+                <p>This was created using cfn-init for the second time</p>
               mode: "000644"
           commands:
             hello:
-              command: "echo 'boom' && exit 1"
+              command: "echo 'hello world from Joseph'"
           services:
             sysvinit:
               httpd:
                 enabled: "true"
                 ensureRunning: "true"
 
-  SampleWaitCondition:
+  # The wait signal does NOT enforce the whole process to wait at least 10 minutes (it ONLY specify the MAXIMUM allowed range to wait)
+  DedicatedWaitCondition:
+    Type: AWS::CloudFormation::WaitCondition
     CreationPolicy:
       ResourceSignal:
-        Timeout: PT1M
-        Count: 1
-    Type: AWS::CloudFormation::WaitCondition
+        Timeout: PT5M # Pending time for 10 Minutes
+        Count: 1 # Count of ONLY 1 instance (Number of instances created by this stack)
 
   # our EC2 security group
   SSHSecurityGroup:

@@ -39,7 +39,10 @@ Resources:
               mode: "000644"
           commands:
             hello:
-              command: "echo 'boom' && exit 1"
+              # exit 0: good exit code
+              # exit 1: bad exit code
+              # This will trigger a cfn failure >>> signal a failure to CloudFormation
+              command: "echo 'Nah~try it again!' && exit 1"
           services:
             sysvinit:
               httpd:

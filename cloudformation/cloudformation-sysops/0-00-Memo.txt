@@ -10,17 +10,35 @@
           /opt/aws/bin/cfn-init -s ${AWS::StackId} -r MyInstance --region ${AWS::Region} || error_exit "Failed to run cfn-init. JYU"
 
 
-
-# The IP protocol name (tcp, udp, icmp, icmpv6)
-# For tcp, udp, and icmp, you must specify a port range.
-- IpProtocol: tcp
-    FromPort: 80
-    ToPort: 80
-    CidrIp: 0.0.0.0/0
-- IpProtocol: tcp
-    FromPort: 22
-    ToPort: 22
-    CidrIp: 192.168.1.1/32
-
 Q: What is tcp, udp, icmp?
 https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/security-group-rules-reference.html
+
+    # The IP protocol name (tcp, udp, icmp, icmpv6)
+    # For tcp, udp, and icmp, you must specify a port range.
+    - IpProtocol: tcp
+        FromPort: 80
+        ToPort: 80
+        CidrIp: 0.0.0.0/0
+    - IpProtocol: tcp
+        FromPort: 22
+        ToPort: 22
+        CidrIp: 192.168.1.1/32
+
+
+Q: ON a SA level, meta data vs. user data?
+
+
+
+✅Q: What exactly are those special bash method E.g. $?
+
+          # Start cfn-signal to the wait condition - let the CF to hang for a few moments until absolute 200
+          /opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackId} --resource DedicatedWaitCondition --region ${AWS::Region}
+
+            https://unix.stackexchange.com/a/7714
+
+            if run_some_command
+            then
+                # Do work when command exists on success
+            else
+                # Do failure exit work
+            fi

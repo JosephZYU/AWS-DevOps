@@ -92,3 +92,43 @@ Focus on the output of our cfn-init script
     💲 cat /var/log/cfn-init.log
 
     💲 cat /var/log/cfn-init-cmd.log
+
+Stack Creation Fails:
+
+    OnFailure=ROLLBACK
+    OnFailure=DO_NOTHING # DO_NOTHING let us to SSH and debug what's wrong with our stack
+    OnFailure=DELETE
+
+🚀 https://docs.aws.amazon.com/cli/latest/reference/cloudformation/create-stack.html
+
+    🅱 cd /home/josephyu/AWS/AWS-DevOps/cloudformation/cloudformation-sysops
+
+    ✅ 💲 aws cloudformation create-stack --stack-name myteststack --template-body file://0-just-ec2.yaml
+
+    ✅ 💲
+        aws cloudformation create-stack \
+            --stack-name cfn-stack-ec2-jyu \
+            --template-body file://0-EC2-JYU.yaml \
+            --on-failure DO_NOTHING 👈🎉
+
+        🚀 https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-describing-stacks.html#using-cfn-describing-stacks-describe-stacks
+        
+        💲 aws cloudformation describe-stacks --stack-name cfn-stack-ec2-jyu
+        {
+            "Stacks": [
+                {
+                    "StackId": "arn:aws:cloudformation:us-east-1:476533684882:stack/cfn-stack-ec2-jyu/533d4110-87d1-11eb-aebe-0af47575f89b",
+                    "StackName": "cfn-stack-ec2-jyu",
+                    "CreationTime": "2021-03-18T10:04:27.977Z",
+                    "RollbackConfiguration": {},
+                    "StackStatus": "CREATE_COMPLETE",
+                    "DisableRollback": true,  👈🎉
+                    "NotificationARNs": [],
+                    "Tags": [],
+                    "EnableTerminationProtection": false,
+                    "DriftInformation": {
+                        "StackDriftStatus": "NOT_CHECKED"
+                    }
+                }
+            ]
+        }
