@@ -19,26 +19,36 @@ Resources:
           #!/bin/bash -xe
           # Get the latest CloudFormation package
           yum update -y aws-cfn-bootstrap
-          # Start cfn-init
-          /opt/aws/bin/cfn-init -s ${AWS::StackId} -r MyInstance --region ${AWS::Region} || error_exit 'Failed to run cfn-init'
+          # Run the much better cfn-init script
+          # -s: pass in the StackId
+          # -r: retrieve My Instance (Metadata?)
+          # ||: Otherwise -> incase of errors -> Error Exit
+          /opt/aws/bin/cfn-init -s ${AWS::StackId} -r MyInstance --region ${AWS::Region} || error_exit "Failed to run cfn-init. JYU"
+      Tags:
+        - Key: "Name"
+          Value: "MyInstance-cfn_init-JYU"
+
     Metadata:
       Comment: Install a simple Apache HTTP page
       AWS::CloudFormation::Init:
         config:
           packages:
+            # From yum packcage, install httpd
+            # == yum install -y httpd
             yum:
               httpd: []
           files:
             "/var/www/html/index.html":
               content: |
-                <h1>Hello World from EC2 instance!</h1>
-                <p>This was created using cfn-init</p>
+                <h1>Hello World from EC2 instance by Joseph!</h1>
+                <p>This was created using cfn-init for my first time</p>
               mode: "000644"
           commands:
             hello:
-              command: "echo 'hello world'"
+              command: "echo 'hello world from Joseph'"
           services:
             sysvinit:
+              # Enable httpd service and ensure it is RUNNING!
               httpd:
                 enabled: "true"
                 ensureRunning: "true"

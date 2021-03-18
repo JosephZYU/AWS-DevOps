@@ -1,3 +1,16 @@
+🐱‍💻👍 || error_exit "Failed to run cfn-init. JYU" 
+
+          #!/bin/bash -xe
+          # Get the latest CloudFormation package
+          yum update -y aws-cfn-bootstrap
+          # Run the much better cfn-init script
+          # -s: pass in the StackId
+          # -r: retrieve My Instance (Metadata?)
+          # ||: Otherwise -> incase of errors -> Error Exit
+          /opt/aws/bin/cfn-init -s ${AWS::StackId} -r MyInstance --region ${AWS::Region} || error_exit "Failed to run cfn-init. JYU"
+
+
+
 # The IP protocol name (tcp, udp, icmp, icmpv6)
 # For tcp, udp, and icmp, you must specify a port range.
 - IpProtocol: tcp

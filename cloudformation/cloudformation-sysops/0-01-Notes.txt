@@ -78,3 +78,17 @@ AWS::CloudFormation::Init
     -> /var/log/cfn-init.log
 
 Run cfn-init -> Retrieve init data
+
+CloudFormation cfn-init is way more readable and user-friendly compared to just using UserData
+
+| vertical pipe -> much more indepth and readability
+
+Return EVERYTHING - hardly readable
+    
+    💲 cat /var/log/cloud-init-output.log
+
+Focus on the output of our cfn-init script
+
+    💲 cat /var/log/cfn-init.log
+
+    💲 cat /var/log/cfn-init-cmd.log
